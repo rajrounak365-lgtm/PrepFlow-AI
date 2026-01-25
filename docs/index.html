@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepFlow - AI Powered Study Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #030712;
+            --card-glass: rgba(17, 24, 39, 0.7);
+            --card-hover: rgba(30, 41, 59, 0.8);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Ambient Background */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 60%);
+            filter: blur(80px);
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .cta-button {
+            padding: 10px 24px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 99px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 4rem;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero h1 span {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+
+        .hero-image-container {
+            margin-top: 3rem;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 25px 80px -20px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+
+        .hero-image-container img {
+            width: 100%;
+            display: block;
+            opacity: 0.9;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 6rem;
+        }
+
+        .feature-grid.reversed {
+            direction: rtl;
+        }
+
+        .feature-grid.reversed .feature-content {
+            direction: ltr;
+        }
+
+        .feature-content {
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--accent-purple);
+            border: 1px solid var(--border-glass);
+        }
+
+        .feature-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .feature-content p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-image {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s;
+        }
+
+        .feature-image:hover {
+            transform: scale(1.02);
+        }
+
+        .feature-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            padding: 4rem 2rem;
+            background: var(--card-glass);
+            border-top: 1px solid var(--border-glass);
+            border-bottom: 1px solid var(--border-glass);
+            margin: 4rem 0;
+            backdrop-filter: blur(12px);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-glass);
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 900px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+
+            .feature-grid.reversed {
+                direction: ltr;
+            }
+
+            .feature-content {
+                padding: 0;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-mesh"></div>
+
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round" style="color:white">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+            </div>
+            <span>PrepFlow</span>
+        </a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href="https://github.com/rajrounak21/" target="_blank">GitHub</a>
+        </div>
+        <a href="#" class="cta-button">Launch App</a>
+    </nav>
+
+    <div class="hero">
+        <h1>Master Your Exams with <br> <span>AI-Powered Planning</span></h1>
+        <p>The all-in-one study companion for GATE, SSC, and UPSC aspirants. Generate custom schedules, solve doubts
+            instantly, and track your progress.</p>
+        <a href="#" class="cta-button" style="padding: 16px 32px; font-size: 1.1rem;">Get Started for Free</a>
+
+        <div class="hero-image-container">
+            <img src="/static/unified_dashboard.png" alt="PrepFlow Dashboard Interface">
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <div class="stat-number">All Major</div>
+            <div class="stat-label">Govt. Exams Supported</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">GenAI</div>
+            <div class="stat-label">Powered Personal Tutors</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Availability</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Personalized</div>
+        </div>
+    </div>
+
+    <div class="features" id="features">
+        <div class="section-title">
+            <h2>Everything you need to succeed</h2>
+            <p style="color: var(--text-muted);">A comprehensive suite of tools designed to optimize your preparation.
+            </p>
+        </div>
+
+        <!-- Feature 1 -->
+        <div class="feature-grid">
+            <div class="feature-content">
+                <div class="feature-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <h3>Smart Study Planner</h3>
+                <p>Stop worrying about what to study. Our AI generates a detailed week-by-week schedule tailored to your
+                    exam date, daily hours, and current skill level. It even adapts to subjects like SSC CGL and GATE
+                    automatically.</p>
+                <a href="#" style="color: var(--accent-purple); font-weight: 600; text-decoration: none;">Create Plan
+                    &rarr;</a>
+            </div>
+            <div class="feature-image">
+                <img src="/static/Study_plan.png" alt="Study Planner Interface">
+            </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-grid reversed">
+            <div class="feature-content">
+                <div class="feature-icon" style="color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                        </path>
+                    </svg>
+                </div>
+                <h3>AI Discussion Tutor</h3>
+                <p>Stuck on a complex topic? Have a doubt at 2 AM? Our context-aware AI tutor is always ready to help.
+                    It remembers your conversation history and provides instant, accurate explanations directly related
+                    to your syllabus.</p>
+            </div>
+            <div class="feature-image">
+                <img src="/static/Study_chat.png" alt="Chat Interface">
+            </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-grid">
+            <div class="feature-content">
+                <div class="feature-icon" style="color: #F43F5E; background: rgba(244, 63, 94, 0.1);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                </div>
+                <h3>Syllabus Explorer</h3>
+                <p>Never get lost in PDFs again. Browse granular syllabus details for nearly any competitive exam. View
+                    marks distribution, topics, and subtopics in a clean, organized interface.</p>
+            </div>
+            <div class="feature-image">
+                <img src="/static/syllabus_explorer.png" alt="Syllabus Explorer">
+            </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-grid reversed">
+            <div class="feature-content">
+                <div class="feature-icon" style="color: #10B981; background: rgba(16, 185, 129, 0.1);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <h3>Weekly Study Assistant</h3>
+                <p>Stay on track with locked weekly modules. The assistant guides you week-by-week, ensuring you master
+                    prerequisites before moving forward. Take quizzes to unlock new planning stages.</p>
+            </div>
+            <div class="feature-image">
+                <img src="/static/Study_helper.png" alt="Study Helper Interface">
+            </div>
+        </div>
+        <!-- Feature 5 -->
+        <div class="feature-grid">
+            <div class="feature-content">
+                <div class="feature-icon" style="color: #94a3b8; background: rgba(148, 163, 184, 0.1);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                </div>
+                <h3>Previous Papers</h3>
+                <p>Gain the edge with our AI-analyzed repository of Past Year Questions (PYQs). Practice with authentic
+                    exam patterns and get instant performance insights. (Coming Soon)</p>
+            </div>
+            <div class="feature-image"
+                style="background: rgba(17, 24, 39, 0.7); display: flex; align-items: center; justify-content: center; min-height: 300px; border: 1px solid var(--border-glass);">
+                <div style="text-align: center; color: var(--text-muted);">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        style="margin-bottom: 1rem; opacity: 0.5;">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    <p>Module Under Development</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div
+            style="display: flex; flex-direction: column; gap: 1rem; align-items: center; justify-content: center; margin-bottom: 2rem;">
+            <h3 style="font-family: 'Outfit'; font-size: 1.5rem; margin-bottom: 0.5rem; color: white;">Get in Touch</h3>
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;">
+                <a href="tel:+919572073615"
+                    style="display: flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; transition: color 0.2s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                        </path>
+                    </svg>
+                    +91 95720 73615
+                </a>
+                <a href="mailto:rajrounak366@gmail.com"
+                    style="display: flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; transition: color 0.2s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    rajrounak366@gmail.com
+                </a>
+            </div>
+        </div>
+        <p>&copy; 2026 PrepFlow AI. Built with ❤️ for students.</p>
+    </footer>
+</body>
+
+</html>
